@@ -1,128 +1,215 @@
-# 📚 BookNPlay
+# 🏟️ BooknPlay - Microservices Sports Booking Platform
 
-A scalable backend system designed for booking and managing events, games, or activities. Built using modern backend technologies with a focus on clean architecture, performance, and extensibility.
+## 📌 Overview
 
----
+**BooknPlay** is a microservices-based sports facility booking platform that allows users to discover, book, and manage sports turfs. Turf owners can onboard and manage their facilities, while admins oversee approvals and governance.
 
-## 🚀 Features
-
-* 🔐 User Authentication & Authorization
-* 📅 Booking Management System
-* 🎮 Event / Activity Listing
-* 💳 Payment Integration (Extendable)
-* 📊 Admin Dashboard (Planned)
-* ⚡ Scalable Microservices-ready Architecture
+This project is designed using **Spring Boot Microservices Architecture** with industry-standard practices like API Gateway, Service Discovery, Event-Driven Communication, and Caching.
 
 ---
 
-## 🏗️ Tech Stack
+## 🏗️ Architecture
 
-* **Backend:** Java, Spring Boot
-* **Database:** MySQL / PostgreSQL
-* **Build Tool:** Maven / Gradle
-* **Version Control:** Git & GitHub
-* **API Testing:** Postman
+The system follows a **Microservices Architecture** with the following components:
+
+* **API Gateway** – Central entry point for all client requests
+* **Service Registry (Eureka)** – Dynamic service discovery
+* **Independent Microservices** – User, Turf, Booking, Payment, Notification
+* **Message Broker** – Asynchronous communication (Kafka/RabbitMQ)
+* **Cache Layer** – Redis for performance optimization
+* **Database** – MySQL (separate DB per service)
 
 ---
 
-## 📁 Project Structure
+## 📦 Microservices
+
+| Service              | Description                      | Port |
+| -------------------- | -------------------------------- | ---- |
+| Eureka Server        | Service Registry                 | 8761 |
+| API Gateway          | Routing & Security               | 8080 |
+| User Service         | Authentication & User Management | 8081 |
+| Turf Service         | Turf Onboarding & Management     | 8082 |
+| Booking Service      | Slot Booking & Availability      | 8083 |
+| Payment Service      | Payment Processing               | 8084 |
+| Notification Service | Email/SMS Notifications          | 8085 |
+
+---
+
+## 🧩 Project Structure
 
 ```
-BookNPlay/
-│── src/
-│   ├── main/
-│   │   ├── java/
-│   │   ├── resources/
-│   │
-│   ├── test/
-│
-│── pom.xml / build.gradle
-│── application.properties
-│── README.md
-```
-
----
-
-## ⚙️ Setup & Installation
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/saqeebalam/26.4.1_SaqeebAlam_BooknPlay.git
-cd BookNPlay
-```
-
----
-
-### 2️⃣ Configure Database
-
-Update `application.properties`:
-
-```
-spring.datasource.url=jdbc:mysql://localhost:3306/booknplay
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+booknplay/
+├── common-lib/
+├── eureka-server/
+├── api-gateway/
+├── user-service/
+├── turf-service/
+├── booking-service/
+├── payment-service/
+├── notification-service/
+├── docs/
+├── database/
+└── pom.xml
 ```
 
 ---
 
-### 3️⃣ Run the Application
+## 🗄️ Database Design
 
-Using Maven:
+* Designed using normalized relational schema
 
-```bash
-mvn spring-boot:run
+* Includes entities like:
+
+  * User
+  * Turf
+  * Turf Slot
+  * Booking
+  * Payment
+  * Notification
+
+* Prevents double booking using **slot-based design**
+
+* Optimized with **indexes and foreign keys**
+
+---
+
+## 🔄 Communication
+
+### 🔹 Synchronous
+
+* REST APIs using:
+
+  * Feign Client
+  * WebClient
+
+### 🔹 Asynchronous
+
+* Event-driven architecture using:
+
+  * Kafka / RabbitMQ
+
+---
+
+## ⚡ Features
+
+* ✅ JWT Authentication & Role-based Access
+* ✅ Turf Search with Filters (location, sport, price)
+* ✅ Real-time Slot Booking
+* ✅ Dynamic Pricing (weekend/peak hours)
+* ✅ Async Notifications (Email/SMS)
+* ✅ Redis Caching for performance
+* ✅ Scheduler for auto-expiry & reminders
+* ✅ Standard API Response format
+* ✅ Global Exception Handling
+* ✅ Pagination support for GET APIs
+
+---
+
+## 🔐 Security
+
+* JWT-based authentication
+* Role-based authorization:
+
+  * CUSTOMER
+  * TURF_OWNER
+  * ADMIN
+* Input validation using annotations
+
+---
+
+## 📘 API Documentation
+
+* Swagger/OpenAPI integration (planned per service)
+* Provides interactive API testing
+
+---
+
+## 🧪 Testing
+
+* Unit testing using:
+
+  * JUnit
+  * Mockito
+* Covers:
+
+  * Positive scenarios
+  * Negative scenarios
+  * Edge cases
+
+---
+
+## 🐳 Setup Instructions
+
+### 🔹 Prerequisites
+
+* Java 17+
+* Maven
+* MySQL
+* Redis
+* Kafka / RabbitMQ (optional)
+
+---
+
+### 🔹 Steps to Run
+
+1. Clone repository
+
+```
+git clone <repo-url>
+cd booknplay
 ```
 
-Or using Gradle:
+2. Build project
 
-```bash
-gradle bootRun
+```
+mvn clean install
+```
+
+3. Start services in order:
+
+```
+1. Eureka Server
+2. API Gateway
+3. Other Microservices
+```
+
+4. Access Eureka Dashboard:
+
+```
+http://localhost:8761
 ```
 
 ---
 
-## 📡 API Endpoints (Sample)
+## 📂 Additional Resources
 
-| Method | Endpoint           | Description         |
-| ------ | ------------------ | ------------------- |
-| GET    | /api/events        | Get all events      |
-| POST   | /api/bookings      | Create booking      |
-| GET    | /api/bookings/{id} | Get booking details |
+* `docs/` → Architecture & design documents
+* `database/` → SQL schema & scripts
 
 ---
 
-## 🧩 Future Enhancements
+## 📈 Future Enhancements
 
-* Microservices Architecture
-* Docker & Kubernetes Deployment
-* CI/CD Pipeline (GitHub Actions)
-* Payment Gateway Integration
-* Notification System (Email/SMS)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-Feel free to fork this repository and submit a pull request.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+* Kubernetes Deployment
+* CI/CD Pipeline
+* Advanced Search (Geo-based)
+* Real Payment Integration
+* Mobile App Integration
 
 ---
 
 ## 👨‍💻 Author
 
-**Saqeeb Alam**
-
-* GitHub: https://github.com/saqeebalam
+**BooknPlay Project**
+Designed for learning and demonstrating real-world microservices architecture.
 
 ---
 
-## ⭐ Support
+## ⭐ Notes
 
-If you like this project, give it a ⭐ on GitHub!
+This project follows best practices in:
+
+* Clean Code
+* Design Patterns
+* Scalable Architecture
+* Modular Development
